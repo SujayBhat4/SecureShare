@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 # Very simple email shape check: something@something.something, no spaces.
@@ -33,3 +35,22 @@ class FileOut(BaseModel):
     content_type: str
     created_at: datetime
     active_link_count: int = 0
+
+
+# Body of POST /api/files/{id}/links
+class LinkCreate(BaseModel):
+    permission: Literal["view", "download"]
+    expires_in: Literal["10m", "1h", "1d", "7d"]
+
+
+# One share link. status is worked out on each request: active, expired or revoked.
+class LinkOut(BaseModel):
+    id: int
+    file_id: int
+    permission: str
+    expires_at: datetime
+    revoked_at: datetime | None
+    access_count: int
+    created_at: datetime
+    status: str = ""
+    url: str = ""

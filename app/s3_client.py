@@ -7,10 +7,13 @@ from app.config import settings
 
 # One S3 client for the whole app. boto3 finds the AWS access key and secret in the
 # environment by itself, so they are never passed around in our code.
+# The regional endpoint is set on purpose: without it the presigned URLs point to the
+# global S3 address and S3 answers "307 redirect", which breaks the signature.
 s3 = boto3.client(
     "s3",
     region_name=settings.aws_region,
-    config=Config(signature_version="s3v4"),
+    endpoint_url=f"https://s3.{settings.aws_region}.amazonaws.com",
+    config=Config(signature_version="s3v4", s3={"addressing_style": "virtual"}),
 )
 
 

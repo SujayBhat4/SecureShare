@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: secureshare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: secureshare
+      POSTGRES_PASSWORD: localpass123
+      POSTGRES_DB: secureshare
+    ports:
+      - "5432:5432"
+    volumes:
+      - secureshare_pgdata:/var/lib/postgresql/data
+
+volumes:
+  secureshare_pgdata:

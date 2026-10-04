@@ -54,3 +54,33 @@ class LinkOut(BaseModel):
     created_at: datetime
     status: str = ""
     url: str = ""
+
+
+# One row of the audit table, with the file name and a friendly actor filled in
+class AuditOut(BaseModel):
+    id: int
+    action: str
+    file_id: int | None
+    file_name: str | None
+    actor: str
+    ip_address: str | None
+    user_agent: str | None
+    detail: str | None
+    created_at: datetime
+
+
+# Views and downloads on one day (used for the bar chart)
+class DayCount(BaseModel):
+    date: str
+    views: int
+    downloads: int
+
+
+# The numbers on top of the dashboard
+class SummaryOut(BaseModel):
+    total_files: int
+    active_links: int
+    views_7d: int
+    downloads_7d: int
+    denied_7d: int
+    daily: list[DayCount]

@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app import models  # noqa: F401  (importing registers the tables on Base)
 from app.database import Base, engine
-from app.routers import auth, files, links, share
+from app.routers import audit, auth, files, links, share
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 
@@ -32,6 +32,7 @@ async def add_security_headers(request: Request, call_next):
 app.include_router(auth.router)
 app.include_router(files.router)
 app.include_router(links.router)
+app.include_router(audit.router)
 app.include_router(share.router)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 

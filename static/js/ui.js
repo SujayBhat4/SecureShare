@@ -33,6 +33,13 @@ function icon(name) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 }
 
+// Fills every <span data-icon="name"> on the page with that icon
+function fillIcons() {
+  document.querySelectorAll("[data-icon]").forEach((el) => {
+    el.innerHTML = icon(el.dataset.icon);
+  });
+}
+
 // The shield-and-link logo
 function brandMark() {
   return '<svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><g transform="translate(7.5 7.5) scale(.375)" stroke-width="4"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><path d="M8 12h8"/></g></svg>';
@@ -54,9 +61,9 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-// Full date and time in the browser's own time zone
-function formatDateTime(iso) {
-  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+// Full date and time in the browser's own time zone (optionally with seconds)
+function formatDateTime(iso, withSeconds = false) {
+  return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: withSeconds ? "medium" : "short" });
 }
 
 // "5 minutes ago", "2 hours ago", "3 days ago"
@@ -189,6 +196,9 @@ function openModal({ title, body, footer, wide = false, onClose }) {
 
   // Escape closes; Tab cycles through the buttons and fields inside the dialog only
   function onKey(event) {
+    // If another dialog is open on top of this one (like a confirm box), let that one handle the key
+    const open = document.querySelectorAll(".modal-backdrop");
+    if (open[open.length - 1] !== backdrop) return;
     if (event.key === "Escape") {
       close();
     } else if (event.key === "Tab") {

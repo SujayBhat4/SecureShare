@@ -452,6 +452,11 @@ button { cursor: pointer; }
   .table .actions::before { content: none; }
   .cell-file { max-width: 180px; }
 }
+@media (max-width: 480px) {
+  .topbar .brand span { display: none; }
+  .user-btn > svg { display: none; }
+  .user-btn { padding: 0 5px; }
+}
 @media (max-width: 420px) {
   .stat-value { font-size: 1.6rem; }
   .stat-card { padding: 16px; }

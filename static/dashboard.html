@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Audit dashboard · SecureShare</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script>try { var t = localStorage.getItem("ss_theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+  <div id="topbar"></div>
+
+  <main class="container page">
+    <div class="page-header">
+      <div>
+        <h1>Audit dashboard</h1>
+        <p class="muted">Who accessed what, and when. Nothing here can be edited or deleted.</p>
+      </div>
+      <span class="live" title="This page refreshes every 15 seconds"><span class="live-dot"></span><span>Live</span></span>
+    </div>
+
+    <!-- Four summary numbers -->
+    <div class="stat-grid">
+      <div class="card stat-card"><div class="stat-label">Files</div><div class="stat-value skeleton" id="stat-files">00</div><div class="stat-caption">Uploaded and not deleted</div></div>
+      <div class="card stat-card"><div class="stat-label">Active links</div><div class="stat-value skeleton" id="stat-links">00</div><div class="stat-caption">Not expired or revoked</div></div>
+      <div class="card stat-card"><div class="stat-label">Views (7 days)</div><div class="stat-value skeleton" id="stat-views">00</div><div class="stat-caption">Links opened</div></div>
+      <div class="card stat-card"><div class="stat-label">Blocked attempts (7 days)</div><div class="stat-value skeleton" id="stat-denied">00</div><div class="stat-caption">Expired, revoked or not allowed</div></div>
+    </div>
+
+    <!-- 7-day bar chart (plain SVG, drawn by dashboard.js) -->
+    <section class="card chart-card" aria-labelledby="chart-title">
+      <div class="card-header">
+        <h2 id="chart-title">Activity, last 7 days</h2>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--primary)"></span>Views</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:var(--success)"></span>Downloads</span>
+        </div>
+      </div>
+      <div class="chart-box" id="chart-box"><div class="chart-tooltip" id="chart-tooltip"></div></div>
+    </section>
+
+    <!-- Audit table with filters -->
+    <section class="card" aria-labelledby="audit-title">
+      <div class="card-header">
+        <h2 id="audit-title">Audit trail</h2>
+        <div class="filters">
+          <select class="select" id="filter-file" aria-label="Filter by file"><option value="">All files</option></select>
+          <select class="select" id="filter-action" aria-label="Filter by action">
+            <option value="">All actions</option>
+            <option value="upload">Upload</option>
+            <option value="link_created">Link created</option>
+            <option value="viewed">Viewed</option>
+            <option value="downloaded">Downloaded</option>
+            <option value="access_denied">Access denied</option>
+            <option value="link_revoked">Link revoked</option>
+            <option value="delete">Delete</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" id="clear-filters" type="button">Clear</button>
+        </div>
+      </div>
+      <div id="audit-body"></div>
+      <div class="table-footer" id="load-more-box" hidden><button class="btn btn-secondary" id="load-more" type="button">Load more</button></div>
+    </section>
+  </main>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/ui.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

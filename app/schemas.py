@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field
 
 # Very simple email shape check: something@something.something, no spaces.
@@ -21,3 +23,13 @@ class LoginRequest(BaseModel):
 class UserOut(BaseModel):
     id: int
     email: str
+
+
+# One file in "Your files". The S3 key and bucket name are never sent to the browser.
+class FileOut(BaseModel):
+    id: int
+    original_name: str
+    size_bytes: int
+    content_type: str
+    created_at: datetime
+    active_link_count: int = 0

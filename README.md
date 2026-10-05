@@ -1,12 +1,17 @@
 # SecureShare
 
-**Share confidential files safely. Every link expires, access is controlled, and every view or download is logged, so you always know who accessed what and when.**
+SecureShare is a web app for sharing private files safely. You upload a file, make a link for it, and send the link to someone. The link stops working after the time you choose, and you can see every time someone opens it.
 
-The owner uploads a file to a **private AWS S3 bucket**, creates a share link with an **expiry** (10 minutes, 1 hour, 1 day or 7 days) and a **permission** (`view` or `download`), and sends it. Anyone with the link can open it without logging in, but the app checks the link, **writes the access to an append-only audit log**, and only then sends the visitor to the file.
+## How it works
 
-> **Demo GIF:** _placeholder. Record the 2-minute demo flow and put the GIF here (for example `docs/demo.gif`)._
->
-> `![SecureShare demo](docs/demo.gif)`
+1. You sign up and log in.
+2. You upload a file. It is stored in a private AWS S3 bucket, so nobody can open it directly.
+3. You create a share link and choose:
+   - how long it lasts: 10 minutes, 1 hour, 1 day or 7 days
+   - what the person can do: **view** the file in the browser, or **download** it
+4. You send the link. The person does not need an account.
+5. When they open the link, the app checks that it is still valid, saves a record of the visit, and only then lets them see the file.
+6. You can cancel a link at any time, and a dashboard shows who opened what and when.
 
 ## Features
 
@@ -68,14 +73,11 @@ copy .env.example .env
 #    DATABASE_URL, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
 #    AWS_REGION=ap-southeast-2, S3_BUCKET_NAME, JWT_SECRET (a long random string)
 
-# 4. (Optional) add demo data: an account, two files, links and a week of activity
-python -m scripts.seed_demo
-
-# 5. Run the app
+# 4. Run the app
 uvicorn app.main:app --reload
 ```
 
-Open <http://localhost:8000>. Demo account (after step 4): `demo@secureshare.dev` / `Demo@12345`.
+Open <http://localhost:8000> and sign up for a new account.
 
 Other URLs: API docs at <http://localhost:8000/docs>, health check at <http://localhost:8000/healthz>.
 
@@ -94,7 +96,7 @@ app/            FastAPI code (one job per file, see EXPLAINED.md)
   routers/      auth, files, links, share (public), audit
 static/         HTML pages, one CSS design system, small JS files
 tests/          pytest tests
-scripts/        seed_demo.py (demo data)
+scripts/        helper scripts
 docs/           blueprint.md (design background)
 ```
 
